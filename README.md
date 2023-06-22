@@ -1,10 +1,10 @@
 ### OTP-APP
 
-This repo helps you add OTP input box in your REACTJS / Next JS app
+This React / NextJS App helps you add an OTP input box in your REACTJS / Next JS app
 
 ## INSTALLATION STEPS
 
-After cloning or downloading the code, run `npm insall` to install all dependencies
+After cloning or downloading the code, run `npm install` to install all dependencies
 
 ```bash
 $ npm install
@@ -26,3 +26,5 @@ $ npm run start
 Visit the server at `http://localhost:3000` to view the app
 
 ## PREVIEW
+
+![ezgif com-video-to-gif](https://github.com/Octagon-simon/otp-app/assets/68190998/b7c4c63e-3140-4dba-a83f-72cdd5d50434)
