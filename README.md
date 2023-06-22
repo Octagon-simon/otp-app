@@ -25,6 +25,14 @@ $ npm run start
 
 Visit the server at `http://localhost:3000` to view the app
 
+## Read the article here
+
+[On Medium](https://simon-ugorji.medium.com/how-to-create-an-otp-input-box-in-react-js-next-js-3acc6adf5d6b)
+ 
+## Watch the Preview
+
+[On YouTube](https://youtu.be/R5SziarxAu4)
+
 ## PREVIEW
 
 ![ezgif com-video-to-gif](https://github.com/Octagon-simon/otp-app/assets/68190998/b7c4c63e-3140-4dba-a83f-72cdd5d50434)
