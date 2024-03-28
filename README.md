@@ -1,14 +1,15 @@
-### OTP-APP
+### React-OTP Component
 
-This React / NextJS App helps you add an OTP input box in your REACTJS / Next JS app
+This is a highly customizable React JS component that you use within your project to enable OTP Code submissions.
 
 ## INSTALLATION STEPS
 
-After cloning or downloading the code, run `npm install` to install all dependencies
+> Please note that this component does not make use of any external library and this means that you can literally copy these files `otpInputs.js` && `otpInputs.module.css` into your project and you're good to go
+
+After cloning the repo or downloading the source code, run `npm install` to install all dependencies.
 
 ```bash
 $ npm install
-
 ```
 
 When the dependencies are installed, and you encounter a babel error, run the command below to resolve this error
@@ -17,13 +18,22 @@ When the dependencies are installed, and you encounter a babel error, run the co
 $ npm install --save-dev @babel/plugin-proposal-private-property-in-object --legacy-peer-deps
 ```
 
-Now Fire up your server
+Now Fire up your server 🔥
 
 ```bash
 $ npm run start
 ```
 
 Visit the server at `http://localhost:3000` to view the app
+
+## CONFIGURATION
+
+- From `v1.1`, `autoSubmit` is configurable when you call the component `<OTPInputGroup autoSubmit={false} />`. 
+  - If you set this prop to `true`, the form will call the submit function once all boxes has been filled, otherwise, you need to hit the submit button for the form to be submitted.
+
+- This simple app supports both Numbers and Letters. 
+  - If you need only numbers or letters, be sure to modify it to suit your project.
+
 
 ## Read the article here
 
