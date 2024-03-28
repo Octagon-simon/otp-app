@@ -41,7 +41,9 @@ Visit the server at `http://localhost:3000` to view the app
  
 ## PREVIEW
 
-![otpInput-ezgif com-speed](https://github.com/KaboCash/react-otp-input/assets/68190998/c873f696-6084-408a-848e-1227596ca650)
+![otpInput-ezgif com-speed-1](https://github.com/KaboCash/react-otp-input/assets/68190998/93ee6ca8-ca87-4501-a13a-eb9f118816ae)
+
+Not playing? [click here to view it](https://github.com/KaboCash/react-otp-input/assets/68190998/93ee6ca8-ca87-4501-a13a-eb9f118816ae)
 
 ## Watch the Preview
 
