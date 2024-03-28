@@ -1,9 +1,8 @@
-//otpInputs.js
-import React, {useState} from "react";
-import './otpInputs.css';
+import React, { forwardRef, useRef, useState } from "react";
+import styles from './otpInputs.module.css'
 
 //Our parent component
-const OTPInputGroup = () => {
+const OTPInputGroup = ({ autoSubmit = false }) => {
     //state to store all input boxes    
     const [inputValues, setInputValues] = useState({
         input1: '',
@@ -14,6 +13,7 @@ const OTPInputGroup = () => {
         input6: '',
         // Add more input values here
     });
+
     //this function updates the value of the state inputValues
     const handleInputChange = (inputId, value) => {
         setInputValues((prevInputValues) => ({
@@ -21,106 +21,153 @@ const OTPInputGroup = () => {
             [inputId]: value,
         }));
     };
+    
     //this function processes form submission
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
         // ... Your submit logic here
+        e?.preventDefault()
+        // declare
+        const otpCode = `OTPCode is: ${Object.values(inputValues).join('')}`
+        //return
+        return alert(otpCode)
     };
+
+    //use refs for inputs
+    const input1 = useRef()
+    const input2 = useRef()
+    const input3 = useRef()
+    const input4 = useRef()
+    const input5 = useRef()
+    const input6 = useRef()
+    //.....create more refs and assign them to more inputs
+
     //return child component
-        return (
+    return (
         <>
-            <div id='OTPInputGroup' className="digitGroup" data-autosubmit="true">
+            <div id='OTPInputGroup' className={styles.digitGroup}>
                 <OTPInput
                     id="input1"
+                    className={styles.digitGroup}
+                    ref={input1}
                     value={inputValues.input1}
                     onValueChange={handleInputChange}
-                    previousId={null}
+                    previousRef={null}
                     handleSubmit={handleSubmit}
-                    nextId="input2"
+                    autoSubmit={autoSubmit}
+                    nextRef={input2}
                 />
                 <OTPInput
                     id="input2"
+                    className={styles.digitGroup}
+                    ref={input2}
                     value={inputValues.input2}
                     onValueChange={handleInputChange}
-                    previousId="input1"
+                    previousRef={input1}
                     handleSubmit={handleSubmit}
-                    nextId="input3"
+                    autoSubmit={autoSubmit}
+                    nextRef={input3}
                 />
                 <OTPInput
                     id="input3"
+                    className={styles.digitGroup}
+                    ref={input3}
                     value={inputValues.input3}
                     onValueChange={handleInputChange}
-                    previousId="input2"
+                    previousRef={input2}
                     handleSubmit={handleSubmit}
-                    nextId="input4"
+                    autoSubmit={autoSubmit}
+                    nextRef={input4}
                 />
                 {/* Seperator */}
-                <span className="splitter">&ndash;</span>
+                <span className={styles.seperator}>&ndash;</span>
+                {/* End of Seperator */}
                 <OTPInput
                     id="input4"
+                    className={styles.digitGroup}
+                    ref={input4}
                     value={inputValues.input4}
                     onValueChange={handleInputChange}
-                    previousId="input3"
+                    previousRef={input3}
                     handleSubmit={handleSubmit}
-                    nextId="input5"
+                    autoSubmit={autoSubmit}
+                    nextRef={input5}
                 />
                 <OTPInput
                     id="input5"
+                    className={styles.digitGroup}
+                    ref={input5}
                     value={inputValues.input5}
                     onValueChange={handleInputChange}
-                    previousId="input4"
+                    previousRef={input4}
                     handleSubmit={handleSubmit}
-                    nextId="input6"
+                    autoSubmit={autoSubmit}
+                    nextRef={input6}
                 />
                 <OTPInput
                     id="input6"
+                    className={styles.digitGroup}
+                    ref={input6}
                     value={inputValues.input6}
                     onValueChange={handleInputChange}
-                    previousId="input5"
+                    previousRef={input5}
                     handleSubmit={handleSubmit}
+                    autoSubmit={autoSubmit}
+                    nextRef={null}
                 />
             </div>
             <div className="btnGroup" onClick={handleSubmit}>
-                <button>Submit</button>
+                <button className={styles.button}>Complete action</button>
             </div>
         </>
     );
 }
+
 //Our child component
-const OTPInput = ({ id, previousId, nextId, value, onValueChange, handleSubmit }) => {
+const OTPInput = forwardRef((props, ref) => {
+
+    const { id, className, previousRef, nextRef, value, onValueChange, handleSubmit, autoSubmit } = props
+
     //This callback function only runs when a key is released
     const handleKeyUp = (e) => {
-        //check if key is backspace or arrowleft
-        if (e.keyCode === 8 || e.keyCode === 37) {
-            //find the previous element
-            const prev = document.getElementById(previousId);
+
+        // Uncomment to debug the component
+        // console.log({
+        //     current: ref,
+        //     next: nextRef,
+        //     previous: previousRef
+        // })
+
+        // Check if key is backspace or arrowleft
+        if (e.key === 'Backspace' || e.key === 'ArrowLeft') {
+            // Find the previous element
+            const prev = previousRef && previousRef.current;
+            // If previous element exists, select it
             if (prev) {
-                //select the previous element
-                prev.select();
+                // Select the previous element
+                return prev.select();
             }
         } else if (
-            (e.keyCode >= 48 && e.keyCode <= 57) || //check if key is numeric keys 0 to 9
-            (e.keyCode >= 65 && e.keyCode <= 90) || //check if key is alphabetical keys A to Z
-            (e.keyCode >= 96 && e.keyCode <= 105) || //check if key is numeric keypad keys 0 to 9
-            e.keyCode === 39 //check if key is right arrow key
+            // Check if key is alphanumeric or right arrow key
+            (e.key.match(/[a-zA-Z0-9]/) && e.key.length === 1) || e.key === 'ArrowRight'
         ) {
-            //find the next element
-            const next = document.getElementById(nextId);
+            // Find the next element
+            const next = nextRef && nextRef.current;
+            // If next element exists, select it
             if (next) {
-                //select the next element
-                next.select();
-            } else {
-                //check if inputGroup has autoSubmit enabled
-                const inputGroup = document.getElementById('OTPInputGroup');
-                if (inputGroup && inputGroup.dataset['autosubmit']) {
-                    //submit the form
-                    handleSubmit();
-                }
+                // Select the next element
+                return next.select();
+            }else if(autoSubmit){
+                // submit the form
+                return handleSubmit()
             }
         }
-    }
+    };
+
     return (
         <input
             id={id}
+            className={className}
+            ref={ref}
             name={id}
             type="text"
             value={value}
@@ -129,6 +176,6 @@ const OTPInput = ({ id, previousId, nextId, value, onValueChange, handleSubmit }
             onKeyUp={handleKeyUp}
         />
     );
-};
+});
 
 export default OTPInputGroup;
