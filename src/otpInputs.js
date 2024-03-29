@@ -21,7 +21,7 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
             [inputId]: value,
         }));
     };
-    
+
     //this function processes form submission
     const handleSubmit = (e) => {
         // ... Your submit logic here
@@ -147,8 +147,12 @@ const OTPInput = forwardRef((props, ref) => {
                 return prev.select();
             }
         } else if (
-            // Check if key is alphanumeric or right arrow key
-            (e.key.match(/[a-zA-Z0-9]/) && e.key.length === 1) || e.key === 'ArrowRight'
+            // Check for alphanumeric character input
+            (e.key && e.key.match(/[a-zA-Z0-9]/) && e.key.length === 1) ||
+            // Check for some mobile keyboards that send keyCode 229
+            (e.keyCode === 229 && e.data && e.data.match(/[a-zA-Z0-9]/)) ||
+            //Check if ArrowRight was pressed
+            e.key === 'ArrowRight'
         ) {
             // Find the next element
             const next = nextRef && nextRef.current;
@@ -156,7 +160,7 @@ const OTPInput = forwardRef((props, ref) => {
             if (next) {
                 // Select the next element
                 return next.select();
-            }else if(autoSubmit){
+            } else if (autoSubmit) {
                 // submit the form
                 return handleSubmit()
             }
