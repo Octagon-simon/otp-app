@@ -137,6 +137,10 @@ const OTPInput = forwardRef((props, ref) => {
         //     previous: previousRef
         // })
 
+        function isAlphaNumeric(str) {
+            return str && str.match(/[a-zA-Z0-9]/);
+        }
+
         // Check if key is backspace or arrowleft
         if (e.key === 'Backspace' || e.key === 'ArrowLeft') {
             // Find the previous element
@@ -147,11 +151,11 @@ const OTPInput = forwardRef((props, ref) => {
                 return prev.select();
             }
         } else if (
-            // Check for alphanumeric character input
-            (e.key && e.key.match(/[a-zA-Z0-9]/) && e.key.length === 1) ||
-            // Check for some mobile keyboards that send keyCode 229
-            (e.keyCode === 229 && e.data && e.data.match(/[a-zA-Z0-9]/)) ||
-            //Check if ArrowRight was pressed
+            // Check for alphanumeric character input on desktop or virtual keyboard
+            ((e.inputType === "text" || e.inputType === "textInput") && isAlphaNumeric(e.key)) ||
+            // Check for mobile keyboard input (including keyCode 229)
+            (e.inputType === "physicalKeyboard" && ((e.key && e.key.match(/[a-zA-Z0-9]/)) || e.keyCode === 229)) ||
+            // Check if ArrowRight was pressed
             e.key === 'ArrowRight'
         ) {
             // Find the next element
