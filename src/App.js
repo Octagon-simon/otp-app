@@ -1,4 +1,3 @@
-import { useState } from "react";
 import OTPInputGroup from "./otpInputs";
 
 function App() {
@@ -40,20 +39,13 @@ function App() {
     }
   }
 
-  const [test, setTest] = useState('')
-
   return (
     <div className="app" style={styles.app}>
       <div style={styles.formWrapper}>
-        <p>
-          {
-            test
-          }
-        </p>
         <form method="post">
           <h2 style={styles.title}>Enter verification code</h2>
           <div style={styles.notification}>Check your inbox for a verification code and enter it below</div>
-          <OTPInputGroup setTest={setTest} autoSubmit={true} />
+          <OTPInputGroup autoSubmit={true} />
         </form>
       </div>
     </div>

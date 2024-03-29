@@ -2,7 +2,7 @@ import React, { forwardRef, useRef, useState } from "react";
 import styles from './otpInputs.module.css'
 
 //Our parent component
-const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
+const OTPInputGroup = ({ autoSubmit = false }) => {
     //state to store all input boxes    
     const [inputValues, setInputValues] = useState({
         input1: '',
@@ -55,7 +55,6 @@ const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input2}
-                    setTest={setTest}
                 />
                 <OTPInput
                     id="input2"
@@ -67,7 +66,6 @@ const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input3}
-                    setTest={setTest}
                 />
                 <OTPInput
                     id="input3"
@@ -79,7 +77,6 @@ const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input4}
-                    setTest={setTest}
                 />
                 {/* Seperator */}
                 <span className={styles.seperator}>&ndash;</span>
@@ -94,7 +91,6 @@ const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input5}
-                    setTest={setTest}
                 />
                 <OTPInput
                     id="input5"
@@ -106,7 +102,6 @@ const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input6}
-                    setTest={setTest}
                 />
                 <OTPInput
                     id="input6"
@@ -118,7 +113,6 @@ const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={null}
-                    setTest={setTest}
                 />
             </div>
             <div className="btnGroup" onClick={handleSubmit}>
@@ -131,23 +125,16 @@ const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
 //Our child component
 const OTPInput = forwardRef((props, ref) => {
 
-    const { setTest, id, className, previousRef, nextRef, value, onValueChange, handleSubmit, autoSubmit } = props
+    const { id, className, previousRef, nextRef, value, onValueChange, handleSubmit, autoSubmit } = props
 
     //This callback function only runs when a key is released
     const handleKeyUp = (e) => {
-
-        setTest(e)
-
         // Uncomment to debug the component
         // console.log({
         //     current: ref,
         //     next: nextRef,
         //     previous: previousRef
         // })
-
-        function isAlphaNumeric(str) {
-            return str && str.match(/[a-zA-Z0-9]/);
-        }
 
         // Check if key is backspace or arrowleft
         if (e.key === 'Backspace' || e.key === 'ArrowLeft') {
@@ -159,11 +146,13 @@ const OTPInput = forwardRef((props, ref) => {
                 return prev.select();
             }
         } else if (
-            // Check for alphanumeric character input on desktop or virtual keyboard
-            ((e.inputType === "text" || e.inputType === "textInput") && (isAlphaNumeric(e.key) || (e.data && isAlphaNumeric(e.data)))) ||
-            // Check for mobile keyboard input (including keyCode 229)
-            (e.inputType === "physicalKeyboard" && ((e.key && e.key.match(/[a-zA-Z0-9]/)) || e.keyCode === 229)) ||
-            // Check if ArrowRight was pressed
+            // Check for alphanumeric character input
+            (e?.key && e?.key?.match(/[a-zA-Z0-9]/) && e?.key?.length === 1) ||
+            // Check for some mobile keyboards that send keyCode 229
+            (e?.keyCode === 229 && e?.target?.value?.match(/[a-zA-Z0-9]/) && e?.target?.value?.length === 1) ||
+            // check for e.data
+            (e?.data && e?.data?.match(/[a-zA-Z0-9]/)) ||
+            //Check if ArrowRight was pressed
             e.key === 'ArrowRight'
         ) {
             // Find the next element
