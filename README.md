@@ -6,7 +6,9 @@ This is a highly customizable React JS component that you use within your projec
 
 ## INSTALLATION STEPS
 
-> Please note that this component does not make use of any external library and this means that you can literally copy these files `otpInputs.js` && `otpInputs.module.css` into your project and you're good to go
+> Please note that this component does not make use of any external library and this means that you can literally copy these files `src/otpInputs.js` && `src/otpInputs.module.css` into your project and you're good to go
+
+> You can also run the project directly on [codeSandbox](https://codesandbox.io/p/sandbox/otp-6p45lz)
 
 After cloning the repo or downloading the source code, run `npm install` to install all dependencies.
 
