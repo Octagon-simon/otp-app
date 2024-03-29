@@ -152,7 +152,7 @@ const OTPInput = forwardRef((props, ref) => {
             }
         } else if (
             // Check for alphanumeric character input on desktop or virtual keyboard
-            ((e.inputType === "text" || e.inputType === "textInput") && isAlphaNumeric(e.key)) ||
+            ((e.inputType === "text" || e.inputType === "textInput") && (isAlphaNumeric(e.key) || (e.data && isAlphaNumeric(e.data)))) ||
             // Check for mobile keyboard input (including keyCode 229)
             (e.inputType === "physicalKeyboard" && ((e.key && e.key.match(/[a-zA-Z0-9]/)) || e.keyCode === 229)) ||
             // Check if ArrowRight was pressed
