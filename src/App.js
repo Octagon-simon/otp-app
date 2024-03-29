@@ -45,7 +45,7 @@ function App() {
         <form method="post">
           <h2 style={styles.title}>Enter verification code</h2>
           <div style={styles.notification}>Check your inbox for a verification code and enter it below</div>
-          <OTPInputGroup />
+          <OTPInputGroup autoSubmit={true} />
         </form>
       </div>
     </div>
