@@ -136,7 +136,7 @@ const OTPInput = forwardRef((props, ref) => {
     //This callback function only runs when a key is released
     const handleKeyUp = (e) => {
 
-        setTest(JSON.stringify(e))
+        setTest(e)
 
         // Uncomment to debug the component
         // console.log({
