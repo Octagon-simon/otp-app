@@ -2,7 +2,7 @@ import React, { forwardRef, useRef, useState } from "react";
 import styles from './otpInputs.module.css'
 
 //Our parent component
-const OTPInputGroup = ({ autoSubmit = false }) => {
+const OTPInputGroup = ({ autoSubmit = false, setTest }) => {
     //state to store all input boxes    
     const [inputValues, setInputValues] = useState({
         input1: '',
@@ -55,6 +55,7 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input2}
+                    setTest={setTest}
                 />
                 <OTPInput
                     id="input2"
@@ -66,6 +67,7 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input3}
+                    setTest={setTest}
                 />
                 <OTPInput
                     id="input3"
@@ -77,6 +79,7 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input4}
+                    setTest={setTest}
                 />
                 {/* Seperator */}
                 <span className={styles.seperator}>&ndash;</span>
@@ -91,6 +94,7 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input5}
+                    setTest={setTest}
                 />
                 <OTPInput
                     id="input5"
@@ -102,6 +106,7 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={input6}
+                    setTest={setTest}
                 />
                 <OTPInput
                     id="input6"
@@ -113,6 +118,7 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
                     handleSubmit={handleSubmit}
                     autoSubmit={autoSubmit}
                     nextRef={null}
+                    setTest={setTest}
                 />
             </div>
             <div className="btnGroup" onClick={handleSubmit}>
@@ -125,10 +131,12 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
 //Our child component
 const OTPInput = forwardRef((props, ref) => {
 
-    const { id, className, previousRef, nextRef, value, onValueChange, handleSubmit, autoSubmit } = props
+    const { setTest, id, className, previousRef, nextRef, value, onValueChange, handleSubmit, autoSubmit } = props
 
     //This callback function only runs when a key is released
     const handleKeyUp = (e) => {
+
+        setTest(JSON.stringify(e))
 
         // Uncomment to debug the component
         // console.log({
