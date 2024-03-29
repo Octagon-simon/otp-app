@@ -2,6 +2,8 @@
 
 This is a highly customizable React JS component that you use within your project to enable OTP Code submissions.
 
+[View the live demo here](https://otp-app-n4sh.onrender.com/)
+
 ## INSTALLATION STEPS
 
 > Please note that this component does not make use of any external library and this means that you can literally copy these files `otpInputs.js` && `otpInputs.module.css` into your project and you're good to go
