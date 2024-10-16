@@ -81,8 +81,8 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
                     />
                 ))}
             </div>
-            <div className="btnGroup" onClick={handleSubmit}>
-                <button className={styles.button}>Complete action</button>
+            <div className="btnGroup">
+                <button onClick={handleSubmit} className={styles.button}>Complete action</button>
             </div>
         </>
     );
