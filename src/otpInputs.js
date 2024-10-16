@@ -1,9 +1,12 @@
-import React, { forwardRef, useRef, useState } from "react";
+import React, { useState, useEffect, forwardRef } from 'react';
 import styles from './otpInputs.module.css'
 
-//Our parent component
+// Create a single array of refs outside of the component
+const inputRefs = Array.from({ length: 6 }, () => React.createRef());
+
+// Parent component
 const OTPInputGroup = ({ autoSubmit = false }) => {
-    //state to store all input boxes    
+    //State to store all input boxes
     const [inputValues, setInputValues] = useState({
         input1: '',
         input2: '',
@@ -11,10 +14,9 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
         input4: '',
         input5: '',
         input6: '',
-        // Add more input values here
     });
 
-    //this function updates the value of the state inputValues
+    //Update the value of inputValues
     const handleInputChange = (inputId, value) => {
         setInputValues((prevInputValues) => ({
             ...prevInputValues,
@@ -22,148 +24,89 @@ const OTPInputGroup = ({ autoSubmit = false }) => {
         }));
     };
 
-    //this function processes form submission
+    //Your custom function to process form submission
     const handleSubmit = (e) => {
-        // ... Your submit logic here
-        e?.preventDefault()
-        // declare
-        const otpCode = `OTPCode is: ${Object.values(inputValues).join('')}`
-        //return
-        return alert(otpCode)
+        e?.preventDefault();
+
+        const otpCode = `OTP Code is: ${Object.values(inputValues).join('')}`;
+
+        setTimeout(() => {
+            alert(otpCode);
+        }, 500)
     };
 
-    //use refs for inputs
-    const input1 = useRef()
-    const input2 = useRef()
-    const input3 = useRef()
-    const input4 = useRef()
-    const input5 = useRef()
-    const input6 = useRef()
-    //.....create more refs and assign them to more inputs
+    // Handle paste event for OTP input group
+    const handlePaste = (e) => {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData('Text').slice(0, 6);
 
-    //return child component
+        if (/^[a-zA-Z0-9]{6}$/.test(pastedData)) {
+            const newInputValues = {};
+            pastedData.split('').forEach((char, index) => {
+                newInputValues[`input${index + 1}`] = char;
+            });
+
+            setInputValues(newInputValues);
+
+            //move focus to the last input
+            inputRefs[5].current.focus();
+        } else {
+            console.error("Invalid OTP format. Please paste a 6-character alphanumeric code.");
+        }
+    };
+
+    useEffect(() => {
+        const allFilled = Object.values(inputValues).every(val => val !== '');
+        if (allFilled && autoSubmit) {
+          handleSubmit();
+        }
+      }, [inputValues, autoSubmit]);
+
+    // Render child components with necessary props
     return (
         <>
-            <div id='OTPInputGroup' className={styles.digitGroup}>
-                <OTPInput
-                    id="input1"
-                    className={styles.digitGroup}
-                    ref={input1}
-                    value={inputValues.input1}
-                    onValueChange={handleInputChange}
-                    previousRef={null}
-                    handleSubmit={handleSubmit}
-                    autoSubmit={autoSubmit}
-                    nextRef={input2}
-                />
-                <OTPInput
-                    id="input2"
-                    className={styles.digitGroup}
-                    ref={input2}
-                    value={inputValues.input2}
-                    onValueChange={handleInputChange}
-                    previousRef={input1}
-                    handleSubmit={handleSubmit}
-                    autoSubmit={autoSubmit}
-                    nextRef={input3}
-                />
-                <OTPInput
-                    id="input3"
-                    className={styles.digitGroup}
-                    ref={input3}
-                    value={inputValues.input3}
-                    onValueChange={handleInputChange}
-                    previousRef={input2}
-                    handleSubmit={handleSubmit}
-                    autoSubmit={autoSubmit}
-                    nextRef={input4}
-                />
-                {/* Seperator */}
-                <span className={styles.seperator}>&ndash;</span>
-                {/* End of Seperator */}
-                <OTPInput
-                    id="input4"
-                    className={styles.digitGroup}
-                    ref={input4}
-                    value={inputValues.input4}
-                    onValueChange={handleInputChange}
-                    previousRef={input3}
-                    handleSubmit={handleSubmit}
-                    autoSubmit={autoSubmit}
-                    nextRef={input5}
-                />
-                <OTPInput
-                    id="input5"
-                    className={styles.digitGroup}
-                    ref={input5}
-                    value={inputValues.input5}
-                    onValueChange={handleInputChange}
-                    previousRef={input4}
-                    handleSubmit={handleSubmit}
-                    autoSubmit={autoSubmit}
-                    nextRef={input6}
-                />
-                <OTPInput
-                    id="input6"
-                    className={styles.digitGroup}
-                    ref={input6}
-                    value={inputValues.input6}
-                    onValueChange={handleInputChange}
-                    previousRef={input5}
-                    handleSubmit={handleSubmit}
-                    autoSubmit={autoSubmit}
-                    nextRef={null}
-                />
+            <div id="OTPInputGroup" className={styles.digitGroup} onPaste={handlePaste}>
+                {inputRefs.map((ref, index) => (
+                    <OTPInput
+                        key={`input${index + 1}`}
+                        id={`input${index + 1}`}
+                        className={styles.digitGroup}
+                        ref={ref}
+                        value={inputValues[`input${index + 1}`]}
+                        onValueChange={handleInputChange}
+                        previousRef={inputRefs[index - 1] || null}
+                        handleSubmit={handleSubmit}
+                        autoSubmit={autoSubmit}
+                        nextRef={inputRefs[index + 1] || null}
+                    />
+                ))}
             </div>
             <div className="btnGroup" onClick={handleSubmit}>
                 <button className={styles.button}>Complete action</button>
             </div>
         </>
     );
-}
+};
 
-//Our child component
+// Child component
 const OTPInput = forwardRef((props, ref) => {
 
-    const { id, className, previousRef, nextRef, value, onValueChange, handleSubmit, autoSubmit } = props
+    const { id, className, previousRef, nextRef, value, onValueChange } = props;
 
-    //This callback function only runs when a key is released
     const handleKeyUp = (e) => {
-        // Uncomment to debug the component
-        // console.log({
-        //     current: ref,
-        //     next: nextRef,
-        //     previous: previousRef
-        // })
-
-        // Check if key is backspace or arrowleft
         if (e.key === 'Backspace' || e.key === 'ArrowLeft') {
-            // Find the previous element
             const prev = previousRef && previousRef.current;
-            // If previous element exists, select it
-            if (prev) {
-                // Select the previous element
-                return prev.select();
-            }
-        } else if (
-            // Check for alphanumeric character input
-            (e?.key && e?.key?.match(/[a-zA-Z0-9]/) && e?.key?.length === 1) ||
-            // Check for some mobile keyboards that send keyCode 229
-            (e?.keyCode === 229 && e?.target?.value?.match(/[a-zA-Z0-9]/) && e?.target?.value?.length === 1) ||
-            // check for e.data
-            (e?.data && e?.data?.match(/[a-zA-Z0-9]/)) ||
-            //Check if ArrowRight was pressed
-            e.key === 'ArrowRight'
-        ) {
-            // Find the next element
+            if (prev) prev.select();
+        }
+    };
+
+    const handleInput = (e) => {
+        const inputChar = e.target.value;
+        if (inputChar.match(/^[a-zA-Z0-9]$/)) {
+            onValueChange(id, inputChar);
             const next = nextRef && nextRef.current;
-            // If next element exists, select it
             if (next) {
-                // Select the next element
-                return next.select();
-            } else if (autoSubmit) {
-                // submit the form
-                return handleSubmit()
+               return next.select();
             }
         }
     };
@@ -178,7 +121,9 @@ const OTPInput = forwardRef((props, ref) => {
             value={value}
             maxLength="1"
             onChange={(e) => onValueChange(id, e.target.value)}
+            onInput={handleInput}
             onKeyUp={handleKeyUp}
+            inputMode="numeric" //this triggers numeric keypad on mobile
         />
     );
 });
